@@ -5,13 +5,13 @@ provider "aws" {
 }
 
 data "aws_vpc" "selected" {
-  id = "${var.vpc_id}"
+  id = var.vpc_id
 }
 
 data "aws_internet_gateway" "default" {
   filter {
     name   = "attachment.vpc-id"
-    values = ["${data.aws_vpc.selected.id}"]
+    values = [data.aws_vpc.selected.id]
   }
 }
 
