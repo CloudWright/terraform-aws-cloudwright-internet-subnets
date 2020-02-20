@@ -1,4 +1,6 @@
-For VPC networks with an existing Internet Gateway but no NAT gateway configured (expected to be common at companies with VMs but not currently using VPC-connected Lambdas)
+## Overview
+
+For AWS VPC networks with an existing Internet Gateway but no NAT gateway configured.  This is common in organizations with VMs attached to a VPC network, but who have no VPC-connected Lambdas.
 
 This module configures:
 
