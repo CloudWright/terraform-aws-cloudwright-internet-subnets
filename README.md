@@ -28,7 +28,7 @@ This module configures:
 Invoked standalone from this project:
 
 ```python
-terraform apply -var 'region=us-east-1' -var 'availability_zone=us-east-1a'  -var 'private_cidr_block=172.0.10.0/24' -var 'public_cidr_block=172.0.11.0/24' -var 'vpc_id=vpc-xxxxxxxx'
+terraform apply -var 'region=us-east-1' -var 'availability_zone=us-east-1a'  -var 'private_cidr_block=172.0.10.0/24' -var 'public_cidr_block=172.0.11.0/24' -var 'vpc_id=vpc-xxxxxxxx' -var 'igw_id=igw-xxxxxxxxxx'
 ```
 
 Invoked as a module in a terraform script:
@@ -42,6 +42,7 @@ module "cloudwright-internet-subnets" {
   private_cidr_block = "172.0.10.0/24"
   public_cidr_block = "172.0.11.0/24"
   vpc_id = "vpc-xxxxxxxx"
+  igw_id = "igw-xxxxxxxxxx"
 }
 ```
 

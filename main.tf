@@ -4,21 +4,16 @@ provider "aws" {
   region  = var.region
 }
 
-data "aws_vpc" "selected" {
-  id = var.vpc_id
-}
-
 data "aws_internet_gateway" "default" {
-  filter {
-    name   = "attachment.vpc-id"
-    values = [data.aws_vpc.selected.id]
-  }
+  internet_gateway_id = var.igw_id
 }
 
 resource "aws_subnet" "public_subnet" {
-  vpc_id            = data.aws_vpc.selected.id
+  vpc_id            = var.vpc_id
   availability_zone = var.availability_zone
   cidr_block        = var.public_cidr_block
+  assign_ipv6_address_on_creation = false
+  map_public_ip_on_launch = false
 
   tags = {
      Name = "Public Subnet"
@@ -27,9 +22,11 @@ resource "aws_subnet" "public_subnet" {
 }
 
 resource "aws_subnet" "private_subnet" {
-  vpc_id            = data.aws_vpc.selected.id
+  vpc_id            = var.vpc_id
   availability_zone = var.availability_zone
   cidr_block        = var.private_cidr_block
+  assign_ipv6_address_on_creation = false
+  map_public_ip_on_launch = false
 
   tags = {
      Name = "Private Subnet"
@@ -54,7 +51,7 @@ resource "aws_nat_gateway" "gw" {
 }
 
 resource "aws_route_table" "public_subnet" {
-  vpc_id = data.aws_vpc.selected.id
+  vpc_id = var.vpc_id
 
   tags = {
     Name = "Public Subnet"
@@ -73,7 +70,7 @@ resource "aws_route_table_association" "public_subnet_association" {
 }
 
 resource "aws_route_table" "private_lambda" {
-  vpc_id = data.aws_vpc.selected.id
+  vpc_id = var.vpc_id
 
   tags = {
     Name = "Private Lambda"
@@ -94,7 +91,8 @@ resource "aws_route_table_association" "private_lambda_association" {
 resource "aws_security_group" "allow_cw_egress" {
   name        = "allow_cw_egress"
   description = "Allow CloudWright Lambdas to access public internet"
-  vpc_id      = data.aws_vpc.selected.id
+  vpc_id      = var.vpc_id
+  revoke_rules_on_delete = true
 
   egress {
     from_port       = 0

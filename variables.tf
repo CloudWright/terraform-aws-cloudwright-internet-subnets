@@ -23,3 +23,8 @@ variable "private_cidr_block" {
   type        = string
   description  = "IP block to allocate to new private subnet"
 }
+
+variable "igw_id" {
+  type        = string
+  description = "The Internet Gateway to use for subnet routing"
+}
